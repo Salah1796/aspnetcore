@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>$(DefaultNetCoreTargetFramework)</TargetFramework>
+    <RestoreAdditionalProjectSources>$(RestoreAdditionalProjectSources);$(ArtifactsShippingPackagesDir)</RestoreAdditionalProjectSources>
+    <UseAspNetCoreSharedRuntime>true</UseAspNetCoreSharedRuntime>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Microsoft.AspNetCore.Grpc.HttpApi\Microsoft.AspNetCore.Grpc.HttpApi.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Protobuf Include=".\Proto\chat.proto" GrpcServices="Server" />
+    <Protobuf Include=".\Proto\greet.proto" GrpcServices="Client" />
+
+    <Reference Include="BenchmarkDotNet" />
+    <Reference Include="Google.Protobuf" />
+    <Reference Include="Grpc.Tools" PrivateAssets="All" />
+  </ItemGroup>
+
+</Project>
