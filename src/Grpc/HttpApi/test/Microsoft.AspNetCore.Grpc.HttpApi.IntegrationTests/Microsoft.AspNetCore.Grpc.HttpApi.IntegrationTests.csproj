@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>$(DefaultNetCoreTargetFramework)</TargetFramework>
     <UseAspNetCoreSharedRuntime>true</UseAspNetCoreSharedRuntime>
+    <Nullable>enable</Nullable>
   </PropertyGroup>
 
   <ItemGroup>
