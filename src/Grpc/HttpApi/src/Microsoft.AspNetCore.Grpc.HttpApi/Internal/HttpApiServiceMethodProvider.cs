@@ -4,14 +4,14 @@
 using Google.Protobuf.Reflection;
 using Grpc.AspNetCore.Server;
 using Grpc.AspNetCore.Server.Model;
-using Grpc.Shared.HttpApi;
+using Grpc.Shared;
 using Grpc.Shared.Server;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
 namespace Microsoft.AspNetCore.Grpc.HttpApi.Internal;
 
-internal class HttpApiServiceMethodProvider<TService> : IServiceMethodProvider<TService> where TService : class
+internal sealed class HttpApiServiceMethodProvider<TService> : IServiceMethodProvider<TService> where TService : class
 {
     private readonly ILogger<HttpApiServiceMethodProvider<TService>> _logger;
     private readonly GrpcServiceOptions _globalOptions;

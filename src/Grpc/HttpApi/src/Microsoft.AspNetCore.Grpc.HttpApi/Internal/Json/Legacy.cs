@@ -285,9 +285,8 @@ internal static class Legacy
                 }
             }
 
-            string? originalName;
             // If this returns false, originalName will be null, which is what we want.
-            nameMapping.TryGetValue(value, out originalName);
+            nameMapping.TryGetValue(value, out var originalName);
             return originalName;
         }
 

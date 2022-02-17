@@ -6,7 +6,7 @@ using System.Reflection;
 using Google.Protobuf;
 using Google.Protobuf.Reflection;
 using Google.Protobuf.WellKnownTypes;
-using Grpc.Shared.HttpApi;
+using Grpc.Shared;
 using Swashbuckle.AspNetCore.SwaggerGen;
 using Type = System.Type;
 

@@ -11,7 +11,7 @@ using Grpc.AspNetCore.Server;
 using Grpc.AspNetCore.Server.Model;
 using Grpc.Core;
 using Grpc.Core.Interceptors;
-using Grpc.Shared.HttpApi;
+using Grpc.Shared;
 using Grpc.Shared.Server;
 using Grpc.Tests.Shared;
 using HttpApi;

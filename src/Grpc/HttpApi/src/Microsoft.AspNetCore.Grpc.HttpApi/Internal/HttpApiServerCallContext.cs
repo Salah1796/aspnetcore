@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.Json;
 using Grpc.AspNetCore.Server;
 using Grpc.Core;
+using Grpc.Shared;
 using Grpc.Shared.Server;
 using Microsoft.AspNetCore.Grpc.HttpApi.Internal.CallHandlers;
 using Microsoft.AspNetCore.Http;
@@ -15,6 +16,9 @@ namespace Microsoft.AspNetCore.Grpc.HttpApi.Internal;
 
 internal sealed class HttpApiServerCallContext : ServerCallContext, IServerCallContextFeature
 {
+    // TODO(JamesNK): Remove nullable override after Grpc.Core.Api update
+    private static readonly AuthContext UnauthenticatedContext = new AuthContext(null!, new Dictionary<string, List<AuthProperty>>());
+
     private readonly IMethod _method;
 
     public HttpContext HttpContext { get; }
@@ -27,6 +31,7 @@ internal sealed class HttpApiServerCallContext : ServerCallContext, IServerCallC
 
     private string? _peer;
     private Metadata? _requestHeaders;
+    private AuthContext? _authContext;
 
     public HttpApiServerCallContext(HttpContext httpContext, MethodOptions options, IMethod method, CallHandlerDescriptorInfo descriptorInfo, ILogger logger)
     {
@@ -107,7 +112,8 @@ internal sealed class HttpApiServerCallContext : ServerCallContext, IServerCallC
         }
     }
 
-    protected override DateTime DeadlineCore { get; }
+    // Deadline returns max value when there isn't a deadline.
+    protected override DateTime DeadlineCore => DateTime.MaxValue;
 
     protected override Metadata RequestHeadersCore
     {
@@ -152,7 +158,22 @@ internal sealed class HttpApiServerCallContext : ServerCallContext, IServerCallC
         set => throw new NotImplementedException();
     }
 
-    protected override AuthContext AuthContextCore => throw new NotImplementedException();
+    protected override AuthContext AuthContextCore
+    {
+        get
+        {
+            if (_authContext == null)
+            {
+                var clientCertificate = HttpContext.Connection.ClientCertificate;
+
+                _authContext = clientCertificate == null
+                    ? UnauthenticatedContext
+                    : AuthContextHelpers.CreateAuthContext(clientCertificate);
+            }
+
+            return _authContext;
+        }
+    }
 
     protected override IDictionary<object, object?> UserStateCore => HttpContext.Items;
 

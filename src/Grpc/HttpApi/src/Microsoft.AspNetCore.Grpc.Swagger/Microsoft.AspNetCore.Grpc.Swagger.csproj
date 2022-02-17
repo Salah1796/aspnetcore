@@ -3,14 +3,11 @@
   <PropertyGroup>
     <Description>Swagger for gRPC ASP.NET Core</Description>
     <PackageTags>gRPC RPC HTTP/2 REST Swagger OpenAPI</PackageTags>
+    <IsAspNetCoreApp>true</IsAspNetCoreApp>
     <IsPackable>true</IsPackable>
     <IsShipping>true</IsShipping>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <TargetFramework>$(DefaultNetCoreTargetFramework)</TargetFramework>
-
-    <!-- Disable analysis for ConfigureAwait(false) -->
-    <WarningsNotAsErrors>$(WarningsNotAsErrors);CA2007</WarningsNotAsErrors>
-    <NoWarn>$(NoWarn);CA2007</NoWarn>
 
     <RestoreAdditionalProjectSources>$(RestoreAdditionalProjectSources);$(ArtifactsShippingPackagesDir)</RestoreAdditionalProjectSources>
     <UseAspNetCoreSharedRuntime>true</UseAspNetCoreSharedRuntime>

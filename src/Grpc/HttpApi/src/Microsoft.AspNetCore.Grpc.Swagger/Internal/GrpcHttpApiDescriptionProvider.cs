@@ -5,7 +5,7 @@ using System.Linq;
 using Google.Api;
 using Google.Protobuf.Reflection;
 using Grpc.AspNetCore.Server;
-using Grpc.Shared.HttpApi;
+using Grpc.Shared;
 using Microsoft.AspNetCore.Grpc.HttpApi;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Abstractions;
@@ -17,7 +17,7 @@ using Microsoft.AspNetCore.Routing;
 
 namespace Microsoft.AspNetCore.Grpc.Swagger.Internal;
 
-internal class GrpcHttpApiDescriptionProvider : IApiDescriptionProvider
+internal sealed class GrpcHttpApiDescriptionProvider : IApiDescriptionProvider
 {
     private readonly EndpointDataSource _endpointDataSource;
 

@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <Description>HTTP API for gRPC ASP.NET Core</Description>
@@ -7,10 +7,6 @@
     <IsShipping>true</IsShipping>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <TargetFramework>$(DefaultNetCoreTargetFramework)</TargetFramework>
-
-    <!-- Disable analysis for ConfigureAwait(false) -->
-    <WarningsNotAsErrors>$(WarningsNotAsErrors);CA2007</WarningsNotAsErrors>
-    <NoWarn>$(NoWarn);CA2007</NoWarn>
 
     <RestoreAdditionalProjectSources>$(RestoreAdditionalProjectSources);$(ArtifactsShippingPackagesDir)</RestoreAdditionalProjectSources>
     <UseAspNetCoreSharedRuntime>true</UseAspNetCoreSharedRuntime>
@@ -31,7 +27,9 @@
     <Compile Include="..\Shared\Server\ServerMethodInvokerBase.cs" Link="Internal\Shared\Server\ServerMethodInvokerBase.cs" />
     <Compile Include="..\Shared\Server\ServerStreamingServerMethodInvoker.cs" Link="Internal\Shared\Server\ServerStreamingServerMethodInvoker.cs" />
     <Compile Include="..\Shared\Server\UnaryServerMethodInvoker.cs" Link="Internal\Shared\Server\UnaryServerMethodInvoker.cs" />
+    <Compile Include="..\Shared\AuthContextHelpers.cs" Link="Internal\Shared\AuthContextHelpers.cs" />
     <Compile Include="..\Shared\ServiceDescriptorHelpers.cs" Link="Internal\Shared\ServiceDescriptorHelpers.cs" />
+    <Compile Include="..\Shared\X509CertificateHelpers.cs" Link="Internal\Shared\X509CertificateHelpers.cs" />
 
     <Protobuf Include="Internal\Protos\errors.proto" Access="Internal" />
   </ItemGroup>
