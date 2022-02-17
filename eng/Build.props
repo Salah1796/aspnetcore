@@ -17,13 +17,14 @@
     <ProjectToExclude Include="$(RepoRoot)src\Middleware\WebSockets\samples\**\*.csproj" />
 
     <!-- These projects are meant to be referenced only by tests. -->
-    <ProjectToExclude Include="$(RepoRoot)src\**\testassets\**\*.*proj"
+    <ProjectToExclude
+      Include="$(RepoRoot)src\**\testassets\**\*.*proj;
+               $(RepoRoot)src\Grpc\HttpApi\**\*.csproj"
       Exclude="$(RepoRoot)src\Components\WebAssembly\testassets\WasmLinkerTest\*.*proj;
                $(RepoRoot)src\Components\WebView\Samples\PhotinoPlatform\testassets\PhotinoTestApp\*.*proj;
                $(RepoRoot)src\Http\Routing\test\testassets\RoutingSandbox\*.*proj;
                $(RepoRoot)src\Security\Authentication\Negotiate\test\testassets\Negotiate.Client\*.*proj;
-               $(RepoRoot)src\Security\Authentication\Negotiate\test\testassets\Negotiate.Server\*.*proj;
-               $(RepoRoot)src\Grpc\HttpApi\**\*.csproj
+               $(RepoRoot)src\Security\Authentication\Negotiate\test\testassets\Negotiate.Server\*.*proj
                " />
 
     <!-- These projects are not meant to be built in this repo. In the Installers case, must explicitly opt in. -->
