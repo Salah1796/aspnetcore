@@ -23,6 +23,7 @@
                $(RepoRoot)src\Http\Routing\test\testassets\RoutingSandbox\*.*proj;
                $(RepoRoot)src\Security\Authentication\Negotiate\test\testassets\Negotiate.Client\*.*proj;
                $(RepoRoot)src\Security\Authentication\Negotiate\test\testassets\Negotiate.Server\*.*proj;
+               $(RepoRoot)src\Grpc\HttpApi\**\*.csproj
                " />
 
     <!-- These projects are not meant to be built in this repo. In the Installers case, must explicitly opt in. -->
@@ -183,7 +184,6 @@
                           $(RepoRoot)src\WebEncoders\**\*.csproj;
                           $(RepoRoot)src\HealthChecks\**\*.csproj;
                           $(RepoRoot)src\Testing\**\*.csproj;
-                          $(RepoRoot)src\Grpc\Interop\test\InteropTests\*.csproj;
                           $(RepoRoot)src\Grpc\**\*.csproj;
                           $(RepoRoot)src\ProjectTemplates\*\*.csproj;
                           $(RepoRoot)src\submodules\spa-templates\src\*.csproj;
