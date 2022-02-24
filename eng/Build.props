@@ -16,7 +16,7 @@
     <!-- Exclude the websockets samples for now because they use classic .csproj, which is not yet supported in our build. -->
     <ProjectToExclude Include="$(RepoRoot)src\Middleware\WebSockets\samples\**\*.csproj" />
 
-    <!-- These projects are meant to be referenced only by tests. -->
+    <!-- These projects are meant to be referenced only by tests or via BuildAfterApp.csproj. -->
     <ProjectToExclude
       Include="$(RepoRoot)src\**\testassets\**\*.*proj;
                $(RepoRoot)src\Grpc\HttpApi\**\*.csproj;"
@@ -189,6 +189,7 @@
                           $(RepoRoot)src\ProjectTemplates\*\*.csproj;
                           $(RepoRoot)src\submodules\spa-templates\src\*.csproj;
                           $(RepoRoot)src\Extensions\**\*.csproj;
+                          $(RepoRoot)src\BuildAfterApp\*.csproj;
                           "
                         Exclude="
                           @(ProjectToBuild);
@@ -228,7 +229,7 @@
                           $(RepoRoot)src\HealthChecks\**\src\*.csproj;
                           $(RepoRoot)src\Testing\**\src\*.csproj;
                           $(RepoRoot)src\Extensions\**\src\*.csproj;
-                          $(RepoRoot)src\Grpc\HttpApi\src\**\*.csproj;
+                          $(RepoRoot)src\BuildAfterApp\*.csproj;
                           "
                         Exclude="
                           @(ProjectToBuild);

@@ -1,21 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <Description>HTTP API for gRPC ASP.NET Core</Description>
     <PackageTags>gRPC RPC HTTP/2 REST</PackageTags>
     <TargetFramework>$(DefaultNetCoreTargetFramework)</TargetFramework>
-
-    <!-- Required because Grpc.AspNetCore.Server uses shared runtime -->
-    <UseAspNetCoreSharedRuntime>true</UseAspNetCoreSharedRuntime>
   </PropertyGroup>
 
   <ItemGroup>
     <InternalsVisibleTo Include="Microsoft.AspNetCore.Grpc.HttpApi.IntegrationTests" />
     <InternalsVisibleTo Include="Microsoft.AspNetCore.Grpc.HttpApi.Tests" />
     <InternalsVisibleTo Include="Microsoft.AspNetCore.Grpc.Microbenchmarks" />
-  </ItemGroup>
 
-  <ItemGroup>
     <Compile Include="..\Shared\Server\BindMethodFinder.cs" Link="Internal\Shared\Server\BindMethodFinder.cs" />
     <Compile Include="..\Shared\Server\ClientStreamingServerMethodInvoker.cs" Link="Internal\Shared\Server\ClientStreamingServerMethodInvoker.cs" />
     <Compile Include="..\Shared\Server\DuplexStreamingServerMethodInvoker.cs" Link="Internal\Shared\Server\DuplexStreamingServerMethodInvoker.cs" />
@@ -28,15 +22,12 @@
     <Compile Include="..\Shared\ServiceDescriptorHelpers.cs" Link="Internal\Shared\ServiceDescriptorHelpers.cs" />
     <Compile Include="..\Shared\X509CertificateHelpers.cs" Link="Internal\Shared\X509CertificateHelpers.cs" />
     <Compile Include="$(SharedSourceRoot)ValueTaskExtensions\**\*.cs" LinkBase="Internal\Shared" />
-    
-    <Protobuf Include="Internal\Protos\errors.proto" Access="Internal" />
-  </ItemGroup>
 
-  <ItemGroup>
+    <Protobuf Include="Internal\Protos\errors.proto" Access="Internal" />
+
     <Reference Include="Google.Api.CommonProtos" />
     <Reference Include="Google.Protobuf" />
     <Reference Include="Grpc.AspNetCore.Server" />
     <Reference Include="Grpc.Tools" PrivateAssets="All" />
   </ItemGroup>
-
 </Project>

@@ -1,0 +1,49 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>$(DefaultNetCoreTargetFramework)</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Enforce build order. Need shared Fx before building the important projects. -->
+    <ProjectReference Include="$(RepoRoot)\src\Framework\App.Ref\src\Microsoft.AspNetCore.App.Ref.csproj"
+      Private="false"
+      ReferenceOutputAssembly="false"
+      SkipGetTargetFrameworkProperties="true" />
+  </ItemGroup>
+
+  <Target Name="BuildDelayedProjects" BeforeTargets="Build" Returns="@(TargetPathWithTargetPlatformMoniker)">
+    <MSBuild Projects="@(RequiresDelayedBuild)"
+        BuildInParallel="$(BuildInParallel)"
+        Properties="MSBuildRestoreSessionId=$([System.Guid]::NewGuid())"
+        Targets="Restore" />
+    <MSBuild Projects="@(RequiresDelayedBuild)" BuildInParallel="$(BuildInParallel)" Targets="Build">
+      <Output TaskParameter="TargetOutputs" ItemName="TargetPathWithTargetPlatformMoniker" />
+    </MSBuild>
+  </Target>
+
+  <Target Name="CleanDelayedProjects" BeforeTargets="Clean">
+    <MSBuild Projects="@(RequiresDelayedBuild)" BuildInParallel="$(BuildInParallel)" Targets="Clean" />
+  </Target>
+
+  <Target Name="GetReferencesDelayedProjects" BeforeTargets="GetReferencesProvided" Returns="@(ProvidesReference)">
+    <MSBuild Projects="@(RequiresDelayedBuild)" BuildInParallel="$(BuildInParallel)" Targets="GetReferencesProvided">
+      <Output TaskParameter="TargetOutputs" ItemName="ProvidesReference" />
+    </MSBuild>
+  </Target>
+
+  <Target Name="PackDelayedProjects" BeforeTargets="Pack">
+    <MSBuild Projects="@(RequiresDelayedBuild)" BuildInParallel="$(BuildInParallel)" Targets="Pack" />
+  </Target>
+
+  <Target Name="PublishDelayedProjects" BeforeTargets="Publish">
+    <MSBuild Projects="@(RequiresDelayedBuild)" BuildInParallel="$(BuildInParallel)" Targets="Publish" />
+  </Target>
+
+  <Target Name="RunTestsDelayedProjects" BeforeTargets="RunTests">
+    <MSBuild Projects="@(RequiresDelayedBuild)" BuildInParallel="$(BuildInParallel)" Targets="RunTests" />
+  </Target>
+
+  <Target Name="VSTestDelayedProjects" BeforeTargets="VSTest">
+    <MSBuild Projects="@(RequiresDelayedBuild)" BuildInParallel="$(BuildInParallel)" Targets="VSTest" />
+  </Target>
+</Project>

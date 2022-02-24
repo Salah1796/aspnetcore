@@ -15,6 +15,5 @@
       SkipGetTargetFrameworkProperties="true" />
 
     <TestAssetProjectReference Include="..\testassets\**\*.csproj" />
-    <TestAssetProjectReference Include="..\..\..\HttpApi\**\*.csproj" />
   </ItemGroup>
 </Project>

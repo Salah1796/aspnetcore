@@ -1,9 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
     <TargetFramework>$(DefaultNetCoreTargetFramework)</TargetFramework>
     <OutputType>Exe</OutputType>
-    <UseAspNetCoreSharedRuntime>true</UseAspNetCoreSharedRuntime>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,5 +13,4 @@
     <Reference Include="Grpc.Tools" PrivateAssets="All" />
     <Reference Include="Microsoft.AspNetCore.Grpc.HttpApi" />
   </ItemGroup>
-
 </Project>
