@@ -1,9 +1,21 @@
 <Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    Forward targets to @(RequiresDelayedBuild) projects after App.Ref has built. Intended for projects that
+    cannot restore without our App.Ref layout and aren't referenced elsewhere in the repo. For projects
+    referenced elsewhere, use something else e.g. @(TestAssetProjectReference) items and
+    FunctionalTestWithAssets.targets for test asset projects that need special handling.
+  -->
   <PropertyGroup>
     <TargetFramework>$(DefaultNetCoreTargetFramework)</TargetFramework>
   </PropertyGroup>
 
   <ItemGroup>
+    <!--
+      When adding new projects to @(RequiresDelayedBuild), temporarily reference the projects here, run
+      GenerateProjectList.ps1, then undo changes in this file. See comments in Build.props for other options.
+    -->
+    <!-- RequiresDelayedBuild Include="..." / -->
+
     <!-- Enforce build order. Need shared Fx before building the important projects. -->
     <ProjectReference Include="$(RepoRoot)\src\Framework\App.Ref\src\Microsoft.AspNetCore.App.Ref.csproj"
       Private="false"
@@ -25,7 +37,15 @@
     <MSBuild Projects="@(RequiresDelayedBuild)" BuildInParallel="$(BuildInParallel)" Targets="Clean" />
   </Target>
 
-  <Target Name="GetReferencesDelayedProjects" BeforeTargets="GetReferencesProvided" Returns="@(ProvidesReference)">
+  <Target Name="CreateHelixPayloadDelayedProjects" BeforeTargets="CreateHelixPayload" Returns="@(HelixWorkItem)">
+    <MSBuild Projects="@(RequiresDelayedBuild)" BuildInParallel="$(BuildInParallel)" Targets="CreateHelixPayload">
+      <Output TaskParameter="TargetOutputs" ItemName="HelixWorkItem" />
+    </MSBuild>
+  </Target>
+
+  <Target Name="GetReferencesProvidedDelayedProjects"
+      BeforeTargets="GetReferencesProvided"
+      Returns="@(ProvidesReference)">
     <MSBuild Projects="@(RequiresDelayedBuild)" BuildInParallel="$(BuildInParallel)" Targets="GetReferencesProvided">
       <Output TaskParameter="TargetOutputs" ItemName="ProvidesReference" />
     </MSBuild>
@@ -39,8 +59,8 @@
     <MSBuild Projects="@(RequiresDelayedBuild)" BuildInParallel="$(BuildInParallel)" Targets="Publish" />
   </Target>
 
-  <Target Name="RunTestsDelayedProjects" BeforeTargets="RunTests">
-    <MSBuild Projects="@(RequiresDelayedBuild)" BuildInParallel="$(BuildInParallel)" Targets="RunTests" />
+  <Target Name="TestDelayedProjects" BeforeTargets="Test">
+    <MSBuild Projects="@(RequiresDelayedBuild)" BuildInParallel="$(BuildInParallel)" Targets="Test" />
   </Target>
 
   <Target Name="VSTestDelayedProjects" BeforeTargets="VSTest">

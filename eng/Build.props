@@ -1,6 +1,16 @@
 <Project>
   <Import Project="Common.props" />
 
+  <!--
+    @(RequiresDelayedBuild) projects can be extended many ways but this isn't fully automated because the new
+    projects likely aren't referenced initially. To add new projects, edit RequiresDelayedBuildProjects.props
+    manually, update the $(BuildMainlyReferenceProviders)' == 'true' item group near the bottom of this file,
+    or edit BuildAfterApp.csproj. Then run GenerateProjectList.ps1 (even for the first option to ensure the
+    format is correct) and undo any temporary changes. When complete, only BuildAfterApp.csproj and other
+    @(RequiresDelayedBuild) projects should mention projects listed in RequiresDelayedBuildProjects.props.
+  -->
+  <Import Project="RequiresDelayedBuildProjects.props" />
+
   <!-- These projects are always excluded, even when -projects is specified on command line. -->
   <ItemGroup>
     <!-- Explicitly excluded projects -->
@@ -19,7 +29,8 @@
     <!-- These projects are meant to be referenced only by tests or via BuildAfterApp.csproj. -->
     <ProjectToExclude
       Include="$(RepoRoot)src\**\testassets\**\*.*proj;
-               $(RepoRoot)src\Grpc\HttpApi\**\*.csproj;"
+               @(RequiresDelayedBuild);
+               "
       Exclude="$(RepoRoot)src\Components\WebAssembly\testassets\WasmLinkerTest\*.*proj;
                $(RepoRoot)src\Components\WebView\Samples\PhotinoPlatform\testassets\PhotinoTestApp\*.*proj;
                $(RepoRoot)src\Http\Routing\test\testassets\RoutingSandbox\*.*proj;
