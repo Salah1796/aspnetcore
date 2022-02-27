@@ -16,6 +16,8 @@
 
 #endregion
 
+#pragma warning disable CA1810 // Initialize all static fields inline.
+
 using System.Globalization;
 using System.Security.Cryptography.X509Certificates;
 
@@ -41,7 +43,7 @@ internal static class X509CertificateHelpers
                     return Array.Empty<string>();
                 }
 
-                // SubjectAlternativeNames might contain something other than a dNSName, 
+                // SubjectAlternativeNames might contain something other than a dNSName,
                 // so we have to parse through and only use the dNSNames
                 // <identifier><delimter><value><separator(s)>
 
@@ -65,7 +67,7 @@ internal static class X509CertificateHelpers
         return Array.Empty<string>();
     }
 
-    // We don't have a strongly typed extension to parse Subject Alt Names, so we have to do a workaround 
+    // We don't have a strongly typed extension to parse Subject Alt Names, so we have to do a workaround
     // to figure out what the identifier, delimiter, and separator is by using a well-known extension
     private static class X509SubjectAlternativeNameConstants
     {
@@ -145,7 +147,7 @@ internal static class X509CertificateHelpers
                 int delimiterIndex = x509ExtensionFormattedString.IndexOf(subjectName1, StringComparison.Ordinal) - 1;
                 s_delimiter = x509ExtensionFormattedString[delimiterIndex];
 
-                // Make an assumption that all characters from the the start of string to the delimiter 
+                // Make an assumption that all characters from the the start of string to the delimiter
                 // are part of the identifier
                 s_identifier = x509ExtensionFormattedString.Substring(0, delimiterIndex);
 
