@@ -7,6 +7,12 @@
   -->
   <PropertyGroup>
     <TargetFramework>$(DefaultNetCoreTargetFramework)</TargetFramework>
+
+    <!-- Cannot build in source-build because that does not create an App.Ref layout. -->
+    <ExcludeFromSourceBuild>true</ExcludeFromSourceBuild>
+
+    <!-- Fake a unit test project unless that would prevent building this project. -->
+    <IsUnitTestProject Condition=" '$(SkipTestBuild)' == 'true' ">true</IsUnitTestProject>
   </PropertyGroup>
 
   <ItemGroup>

@@ -7,5 +7,9 @@
 
     <!-- Required because Swashbuckle.AspNetCore uses shared runtime -->
     <UseAspNetCoreSharedRuntime>true</UseAspNetCoreSharedRuntime>
+
+    <!-- Workaround lack of Linux MUSL x64 support. -->
+    <ExcludeFromBuild
+        Condition=" '$(TargetOsName)' == 'linux-musl' and '$(TargetArchitecture)' == 'x64' ">true</ExcludeFromBuild>
   </PropertyGroup>
 </Project>
