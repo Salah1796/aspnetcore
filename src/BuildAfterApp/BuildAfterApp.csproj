@@ -8,9 +8,6 @@
   <PropertyGroup>
     <TargetFramework>$(DefaultNetCoreTargetFramework)</TargetFramework>
 
-    <!-- Cannot build in source-build because that does not create an App.Ref layout. -->
-    <ExcludeFromSourceBuild>true</ExcludeFromSourceBuild>
-
     <!-- Fake a unit test project unless that would prevent building this project. -->
     <IsUnitTestProject Condition=" '$(SkipTestBuild)' == 'true' ">true</IsUnitTestProject>
   </PropertyGroup>
@@ -29,7 +26,11 @@
       SkipGetTargetFrameworkProperties="true" />
   </ItemGroup>
 
-  <Target Name="BuildDelayedProjects" BeforeTargets="Build" Returns="@(TargetPathWithTargetPlatformMoniker)">
+  <!-- Cannot build in source-build because that does not create an App.Ref layout. -->
+  <Target Name="BuildDelayedProjects"
+      BeforeTargets="Build"
+      Condition=" '$(DotNetBuildFromSource)' != 'true' "
+      Returns="@(TargetPathWithTargetPlatformMoniker)">
     <MSBuild Projects="@(RequiresDelayedBuild)"
         BuildInParallel="$(BuildInParallel)"
         Properties="MSBuildRestoreSessionId=$([System.Guid]::NewGuid())"
@@ -39,11 +40,14 @@
     </MSBuild>
   </Target>
 
-  <Target Name="CleanDelayedProjects" BeforeTargets="Clean">
+  <Target Name="CleanDelayedProjects" BeforeTargets="Clean" Condition=" '$(DotNetBuildFromSource)' != 'true' ">
     <MSBuild Projects="@(RequiresDelayedBuild)" BuildInParallel="$(BuildInParallel)" Targets="Clean" />
   </Target>
 
-  <Target Name="CreateHelixPayloadDelayedProjects" BeforeTargets="CreateHelixPayload" Returns="@(HelixWorkItem)">
+  <Target Name="CreateHelixPayloadDelayedProjects"
+      BeforeTargets="CreateHelixPayload"
+      Condition=" '$(DotNetBuildFromSource)' != 'true' "
+      Returns="@(HelixWorkItem)">
     <MSBuild Projects="@(RequiresDelayedBuild)" BuildInParallel="$(BuildInParallel)" Targets="CreateHelixPayload">
       <Output TaskParameter="TargetOutputs" ItemName="HelixWorkItem" />
     </MSBuild>
@@ -57,19 +61,19 @@
     </MSBuild>
   </Target>
 
-  <Target Name="PackDelayedProjects" BeforeTargets="Pack">
+  <Target Name="PackDelayedProjects" BeforeTargets="Pack" Condition=" '$(DotNetBuildFromSource)' != 'true' ">
     <MSBuild Projects="@(RequiresDelayedBuild)" BuildInParallel="$(BuildInParallel)" Targets="Pack" />
   </Target>
 
-  <Target Name="PublishDelayedProjects" BeforeTargets="Publish">
+  <Target Name="PublishDelayedProjects" BeforeTargets="Publish" Condition=" '$(DotNetBuildFromSource)' != 'true' ">
     <MSBuild Projects="@(RequiresDelayedBuild)" BuildInParallel="$(BuildInParallel)" Targets="Publish" />
   </Target>
 
-  <Target Name="TestDelayedProjects" BeforeTargets="Test">
+  <Target Name="TestDelayedProjects" BeforeTargets="Test" Condition=" '$(DotNetBuildFromSource)' != 'true' ">
     <MSBuild Projects="@(RequiresDelayedBuild)" BuildInParallel="$(BuildInParallel)" Targets="Test" />
   </Target>
 
-  <Target Name="VSTestDelayedProjects" BeforeTargets="VSTest">
+  <Target Name="VSTestDelayedProjects" BeforeTargets="VSTest" Condition=" '$(DotNetBuildFromSource)' != 'true' ">
     <MSBuild Projects="@(RequiresDelayedBuild)" BuildInParallel="$(BuildInParallel)" Targets="VSTest" />
   </Target>
 </Project>
