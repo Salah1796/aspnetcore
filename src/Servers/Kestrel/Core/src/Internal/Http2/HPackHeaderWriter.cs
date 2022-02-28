@@ -4,7 +4,11 @@
 using System.Net.Http;
 using System.Net.Http.HPack;
 
+#if !(IS_TESTS || IS_BENCHMARKS)
 namespace Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http2;
+#else
+namespace Microsoft.AspNetCore.Server.Kestrel.Core.Tests;
+#endif
 
 internal static class HPackHeaderWriter
 {

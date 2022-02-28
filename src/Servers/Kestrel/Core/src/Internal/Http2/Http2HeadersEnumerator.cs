@@ -7,7 +7,13 @@ using System.Text;
 using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
 using Microsoft.Extensions.Primitives;
 
+#if !(IS_TESTS || IS_BENCHMARKS)
 namespace Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http2;
+#else
+namespace Microsoft.AspNetCore.Server.Kestrel.Core.Tests;
+#endif
+
+#nullable enable
 
 internal sealed class Http2HeadersEnumerator : IEnumerator<KeyValuePair<string, string>>
 {
@@ -15,12 +21,16 @@ internal sealed class Http2HeadersEnumerator : IEnumerator<KeyValuePair<string, 
     {
         Headers,
         Trailers,
-        Untyped
+#if IS_TESTS || IS_BENCHMARKS
+        Untyped,
+#endif
     }
     private HeadersType _headersType;
     private HttpResponseHeaders.Enumerator _headersEnumerator;
     private HttpResponseTrailers.Enumerator _trailersEnumerator;
+#if IS_TESTS || IS_BENCHMARKS
     private IEnumerator<KeyValuePair<string, StringValues>>? _genericEnumerator;
+#endif
     private StringValues.Enumerator _stringValuesEnumerator;
     private bool _hasMultipleValues;
     private KnownHeaderType _knownHeaderType;
@@ -47,6 +57,7 @@ internal sealed class Http2HeadersEnumerator : IEnumerator<KeyValuePair<string, 
         _hasMultipleValues = false;
     }
 
+#if IS_TESTS || IS_BENCHMARKS
     public void Initialize(IDictionary<string, StringValues> headers)
     {
         switch (headers)
@@ -67,6 +78,7 @@ internal sealed class Http2HeadersEnumerator : IEnumerator<KeyValuePair<string, 
 
         _hasMultipleValues = false;
     }
+#endif
 
     public bool MoveNext()
     {
@@ -89,15 +101,20 @@ internal sealed class Http2HeadersEnumerator : IEnumerator<KeyValuePair<string, 
         }
         else
         {
+#if IS_TESTS || IS_BENCHMARKS
             return _genericEnumerator!.MoveNext()
                 ? SetCurrent(_genericEnumerator.Current.Key, _genericEnumerator.Current.Value, GetKnownRequestHeaderType(_genericEnumerator.Current.Key))
                 : false;
+#else
+            ThrowUnexpectedHeadersType();
+            return false;
+#endif
         }
     }
 
+#if IS_TESTS || IS_BENCHMARKS
     private static KnownHeaderType GetKnownRequestHeaderType(string headerName)
     {
-#if DEBUG
         // Include request headers for local development. This allows request headers to be sent as static headers.
         // Could potentially cause different test results in DEBUG vs RELEASE.
         // Consider whether there is a better way to do this.
@@ -108,10 +125,14 @@ internal sealed class Http2HeadersEnumerator : IEnumerator<KeyValuePair<string, 
             default:
                 return default;
         }
-#else
-        return default;
-#endif
     }
+#else
+    [System.Runtime.CompilerServices.MethodImpl(System.Runtime.CompilerServices.MethodImplOptions.NoInlining)]
+    private static void ThrowUnexpectedHeadersType()
+    {
+        throw new InvalidOperationException("Unexpected headers collection type.");
+    }
+#endif
 
     private bool MoveNextOnStringEnumerator(string key)
     {
@@ -152,7 +173,11 @@ internal sealed class Http2HeadersEnumerator : IEnumerator<KeyValuePair<string, 
         }
         else
         {
+#if IS_TESTS || IS_BENCHMARKS
             _genericEnumerator!.Reset();
+#else
+            ThrowUnexpectedHeadersType();
+#endif
         }
         _stringValuesEnumerator = default;
         _knownHeaderType = default;
