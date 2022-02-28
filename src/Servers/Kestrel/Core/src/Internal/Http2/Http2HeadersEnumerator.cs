@@ -115,9 +115,6 @@ internal sealed class Http2HeadersEnumerator : IEnumerator<KeyValuePair<string, 
 #if IS_TESTS || IS_BENCHMARKS
     private static KnownHeaderType GetKnownRequestHeaderType(string headerName)
     {
-        // Include request headers for local development. This allows request headers to be sent as static headers.
-        // Could potentially cause different test results in DEBUG vs RELEASE.
-        // Consider whether there is a better way to do this.
         switch (headerName)
         {
             case ":method":
@@ -242,10 +239,8 @@ internal sealed class Http2HeadersEnumerator : IEnumerator<KeyValuePair<string, 
                 return H2StaticTable.ContentLength;
             default:
                 return -1;
-#if DEBUG
-            // Include request headers for local development. This allows request headers to be sent as static headers.
-            // Could potentially cause different test results in DEBUG vs RELEASE.
-            // Consider whether there is a better way to do this.
+#if IS_TESTS || IS_BENCHMARKS
+            // Include request headers for tests.
             case KnownHeaderType.Method:
                 return H2StaticTable.MethodGet;
 #endif
